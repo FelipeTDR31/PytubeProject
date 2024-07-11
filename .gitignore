@@ -1,0 +1,23 @@
+# .gitignore
+env/
+*.py[co]
+*.pyc
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.db.sqlite3
+db.sqlite3-journal
+logs/
+media/
+migrations/
+*.pyd
+*.pyo
+*.pyw
+*.pyz
+*.pyzma
+*.pyzout
+*.pyzout.gz
+*.pyzout.xz
+*.pyzout.zst
+*.pyzout.bz2
+*.pyzout.lzma

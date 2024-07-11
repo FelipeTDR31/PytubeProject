@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tubeapp</title>
+</head>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+<body>
+    <div class="container">
+        <h1>Tubeapp</h1>
+        <div style="display: flex; align-items: center; flex-direction: column; gap: 10px;">
+            <input type="text" name="ytSearch" id="ytSearch" placeholder="escreva o link aqui">
+            <div id="ytStreamOptions">
+                <button id="btnYTStream">Baixar</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    const btnYTStreamOptions = document.getElementById('btnYTStreamOptions');
+    const ytSearch = document.getElementById('ytSearch');
+
+    ytSearch.addEventListener("keyup", (e) => {
+        const url = e.target.value
+        console.log(url)
+        if (e.key === 'Enter') {
+            
+            fetch("http://127.0.0.1:8000/tubeapp/search", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ url })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+            })
+        }
+    })
+</script>
+</html>
