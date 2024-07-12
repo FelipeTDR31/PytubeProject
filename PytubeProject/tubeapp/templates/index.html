@@ -16,14 +16,59 @@
         flex-direction: column;
         align-items: center;
     }
+    
+    #ytStreamOptions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #ytStreamOptions input[type="radio"] {
+        margin-left: 0;
+    }
+
+    #ytStreamOptions input[type="radio"] + label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #ytStreamOptions input[type="radio"] + label span {
+        font-weight: bold;
+    }
+
+    #btnYTStream {
+        margin-top: 20px;
+        appearance: none;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    
+    #ytSearch {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 300px;
+    }
+    
+    #ytTitle {
+        font-weight: bold;
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
 </style>
 <body>
     <div class="container">
-        <h1>Tubeapp</h1>
+        <h1 id="ytTitle">Tubeapp</h1>
         <div style="display: flex; align-items: center; flex-direction: column; gap: 10px;">
             <input type="text" name="ytSearch" id="ytSearch" placeholder="escreva o link aqui">
             <div id="ytStreamOptions">
-                <button id="btnYTStream">Baixar</button>
             </div>
         </div>
     </div>
@@ -31,8 +76,23 @@
 
 <script>
 
-    const btnYTStreamOptions = document.getElementById('btnYTStreamOptions');
+    const btnYTStream = document.getElementById('btnYTStream');
+    const ytStreamOptions = document.getElementById('ytStreamOptions');
     const ytSearch = document.getElementById('ytSearch');
+
+    function handleBtnYTStreamClick() {
+        const url = ytSearch.value
+        const selectedStream = document.querySelector('input[name="ytStreamOptions"]:checked').value
+        const audioStream = document.querySelector('#audioStream').innerHTML
+        console.log(url, selectedStream, audioStream)
+        fetch("http://127.0.0.1:8000/tubeapp/download", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url, selectedStream: Number(selectedStream), audioStream: Number(audioStream) })
+        })
+    }
 
     ytSearch.addEventListener("keyup", (e) => {
         const url = e.target.value
@@ -48,7 +108,21 @@
             })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
+                const { title, streams, audioStreams } = data
+                let streamOptionElements = []
+                for (const stream of streams) {
+                    const { resolution, itag } = stream
+                    const optionElement = `<input type="radio" name="ytStreamOptions" value="${itag}" /> ${resolution}`
+                    streamOptionElements.push(optionElement)
+                }
+                ytStreamOptions.innerHTML = `
+                    <h2 id="ytTitle">${title}</h2>
+                    <div style="display: flex; align-items: center; flex-direction: column; gap: 10px;">
+                        ${streamOptionElements.join('')}
+                        <span id="audioStream" style="font-weight: bold;">${audioStreams[0].itag}</span>
+                    </div>
+                    <button id="btnYTStream" onclick='handleBtnYTStreamClick()'>Baixar</button>
+                `
             })
         }
     })

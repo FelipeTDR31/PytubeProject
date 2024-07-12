@@ -1,0 +1,6 @@
+# Ignore Dockerfile and other build configuration files
+.Dockerfile
+*.dockerignore
+*.env
+*.env.*
+env
