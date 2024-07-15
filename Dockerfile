@@ -1,5 +1,5 @@
 # Use the official Django image
-FROM python:3.12.4
+FROM python:3.12.3
 
 # Set the working directory
 WORKDIR /PytubeProject
@@ -18,4 +18,4 @@ RUN apt-get -y install ffmpeg
 EXPOSE 8000
 
 # Run app.py when the container launches
-CMD ["python", "PytubeProject\manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "PytubeProject/manage.py", "runserver", "0.0.0.0:8000"]

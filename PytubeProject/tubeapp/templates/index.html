@@ -20,21 +20,13 @@
     #ytStreamOptions {
         display: flex;
         flex-direction: column;
+        align-items: center;
+
         gap: 10px;
     }
 
     #ytStreamOptions input[type="radio"] {
         margin-left: 0;
-    }
-
-    #ytStreamOptions input[type="radio"] + label {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    #ytStreamOptions input[type="radio"] + label span {
-        font-weight: bold;
     }
 
     #btnYTStream {
@@ -112,14 +104,17 @@
                 let streamOptionElements = []
                 for (const stream of streams) {
                     const { resolution, itag } = stream
-                    const optionElement = `<input type="radio" name="ytStreamOptions" value="${itag}" /> ${resolution}`
-                    streamOptionElements.push(optionElement)
+                    const existingResolutions = streamOptionElements.map(optionElement => optionElement.split(' ')[13])
+                    if (!existingResolutions.includes(resolution)) {
+                        const optionElement = `<div style="display: flex; flex-direction: column; align-items: center; gap: 5px;"><input type="radio" name="ytStreamOptions" value="${itag}" /> ${resolution} </div>`
+                        streamOptionElements.push(optionElement)
+                    }
                 }
                 ytStreamOptions.innerHTML = `
-                    <h2 id="ytTitle">${title}</h2>
-                    <div style="display: flex; align-items: center; flex-direction: column; gap: 10px;">
+                    <h2 id="ytTitle" style="font-size: 1.5em">${title}</h2>
+                    <div style="display: flex; align-items: center; gap: 10px;">
                         ${streamOptionElements.join('')}
-                        <span id="audioStream" style="font-weight: bold;">${audioStreams[0].itag}</span>
+                        <span id="audioStream" style="font-weight: bold; opacity: 0">${audioStreams[0].itag}</span>
                     </div>
                     <button id="btnYTStream" onclick='handleBtnYTStreamClick()'>Baixar</button>
                 `
