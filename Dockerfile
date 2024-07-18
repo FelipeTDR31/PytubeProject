@@ -15,7 +15,11 @@ RUN apt-get -y upgrade
 RUN apt-get -y install ffmpeg
 
 # Make port 8000 available to the world outside this container
-EXPOSE 8000
+
+ENV DJANGO_ALLOWED_HOST="127.0.0.3"
+ENV DJANGO_PORT=8000
+
+EXPOSE ${DJANGO_PORT}
 
 # Run app.py when the container launches
 CMD ["python", "PytubeProject/manage.py", "runserver", "0.0.0.0:8000"]

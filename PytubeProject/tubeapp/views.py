@@ -7,6 +7,7 @@ import random
 import shutil
 import os
 from django.http import FileResponse
+from django.conf import settings
 # Create your views here.
 
 def merge_video_audio(video_path, audio_path, output_path):
@@ -25,7 +26,7 @@ def download(request, name):
         return FileResponse(file, as_attachment=True, filename=name+".mp4", content_type='video/mp4')
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html', {'requestURL': settings.REQUEST_URL})
 
 def search(request):
     if request.method == 'POST':

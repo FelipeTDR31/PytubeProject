@@ -107,7 +107,7 @@
             </div>
         `
         let file_name;
-        fetch("http://127.0.0.1:8000/tubeapp/prepare", {
+        fetch("http://{{requestURL}}/tubeapp/prepare", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -117,7 +117,7 @@
         .then(res => res.json())
         .then(data => {
             file_name = data.file_name
-            window.location.href=`http://127.0.0.1:8000/tubeapp/download/${file_name}`
+            window.location.href=`http://{{requestURL}}/tubeapp/download/${file_name}`
             btnYTStreamContainer.innerHTML = `
                 <button id="btnYTStream" onclick="handleBtnYTStreamClick()">Download</button>
             `
@@ -129,8 +129,8 @@
         const url = e.target.value
         console.log(url)
         if (e.key === 'Enter') {
-            
-            fetch("http://127.0.0.1:8000/tubeapp/search", {
+            console.log(`http://{{requestURL}}/tubeapp/search`)
+            fetch(`http://{{requestURL}}/tubeapp/search`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
