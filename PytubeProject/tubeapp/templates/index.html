@@ -76,8 +76,9 @@
         const url = ytSearch.value
         const selectedStream = document.querySelector('input[name="ytStreamOptions"]:checked').value
         const audioStream = document.querySelector('#audioStream').innerHTML
+        let file_name;
         alert("Download iniciado")
-        fetch("http://127.0.0.1:8000/tubeapp/download", {
+        fetch("http://127.0.0.1:8000/tubeapp/prepare", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -86,9 +87,8 @@
         })
         .then(res => res.json())
         .then(data => {
-            if (data.status = "success") {
-                alert("Download concluído com sucesso!")
-            }
+            file_name = data.file_name
+            window.location.href=`http://127.0.0.1:8000/tubeapp/download/${file_name}`
         })
     }
 
@@ -122,7 +122,7 @@
                         ${streamOptionElements.join('')}
                         <span id="audioStream" style="font-weight: bold; opacity: 0">${audioStreams[0].itag}</span>
                     </div>
-                    <button id="btnYTStream" onclick='handleBtnYTStreamClick()'>Baixar</button>
+                    <button id="btnYTStream" onclick='handleBtnYTStreamClick()'>Download</button>
                 `
             })
         }
