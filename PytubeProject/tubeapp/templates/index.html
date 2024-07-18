@@ -33,11 +33,12 @@
         margin-top: 20px;
         appearance: none;
         border: none;
-        padding: 10px 20px;
+        padding: 20px 40px;
         border-radius: 5px;
         background-color: #007bff;
         color: #fff;
         font-weight: bold;
+        font-size: 2rem;
         cursor: pointer;
     }
 
@@ -53,6 +54,28 @@
         font-weight: bold;
         font-size: 2em;
         margin-bottom: 10px;
+    }
+
+    
+    .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        border: 0.25rem solid #ccc;
+        border-top: 0.25rem solid #007bff;
+        border-radius: 50%;
+        animation: spinner-border 0.75s linear infinite;
+    }
+    
+    @keyframes spinner-border {
+        100% {
+            transform: rotate(360deg);
+        }
     }
 </style>
 <body>
@@ -76,8 +99,14 @@
         const url = ytSearch.value
         const selectedStream = document.querySelector('input[name="ytStreamOptions"]:checked').value
         const audioStream = document.querySelector('#audioStream').innerHTML
+        const btnYTStreamContainer = document.getElementById('btnYTStreamContainer');
+        btnYTStreamContainer.innerHTML = `
+            <div id="loading" class="loading">
+                <span class="spinner-border text-primary" role="status">
+                </span>
+            </div>
+        `
         let file_name;
-        alert("Download iniciado")
         fetch("http://127.0.0.1:8000/tubeapp/prepare", {
             method: "POST",
             headers: {
@@ -89,6 +118,9 @@
         .then(data => {
             file_name = data.file_name
             window.location.href=`http://127.0.0.1:8000/tubeapp/download/${file_name}`
+            btnYTStreamContainer.innerHTML = `
+                <button id="btnYTStream" onclick="handleBtnYTStreamClick()">Download</button>
+            `
         })
         .catch(() => alert("Download Falhou"))
     }
@@ -123,7 +155,10 @@
                         ${streamOptionElements.join('')}
                         <span id="audioStream" style="font-weight: bold; opacity: 0">${audioStreams[0].itag}</span>
                     </div>
-                    <button id="btnYTStream" onclick='handleBtnYTStreamClick()'>Download</button>
+                    <div id="btnYTStreamContainer">
+                        <button id="btnYTStream" onclick='handleBtnYTStreamClick()'>Download</button>
+                    </div>
+                   
                 `
             })
             .catch(() => alert("Pesquisa Falhou"))
