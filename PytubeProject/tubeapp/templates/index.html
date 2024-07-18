@@ -90,6 +90,7 @@
             file_name = data.file_name
             window.location.href=`http://127.0.0.1:8000/tubeapp/download/${file_name}`
         })
+        .catch(() => alert("Download Falhou"))
     }
 
     ytSearch.addEventListener("keyup", (e) => {
